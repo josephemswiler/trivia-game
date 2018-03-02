@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Shrikhand|Bungee+Shade|Ubuntu');
+body {
+    background: #ecf0f1;
+    font-family: 'Ubuntu', sans-serif;
+    line-height: 36px;
+    font-size: 18px;
+    color: #7f8c8d;
+}
+
+.title {
+    font-family: 'Bungee Shade', cursive;
+    font-size: 28px;
+    line-height: 56px;
+    margin: 0 auto;
+    text-align: center;
+    color: #757575;
+}
+.title-1 {
+    color: #e74c3c;
+}
+
+h1 {
+    font-family: 'Shrikhand', cursive;
+    font-size: 28px;
+    line-height: 56px;
+}
+.btn:hover {
+}
+sup {
+
+}
+
+.guess-beer {
+    color: #34495e;
+}
