@@ -81,6 +81,7 @@
     var qIndex = 0;
     var qCount = 1;
     var guessMade = false;
+    var qList = [0,1,2,3,4,5,6,7,8,9,10]; //total number of questions
 
     var answerQ1;
     var answerQ2;
@@ -138,7 +139,7 @@
         allBreweries = fisherYates(allBreweries);
 
 
-        $('.title').html('Question <sup>#</sup><span class="q-number">1</span>');
+        $('.title').html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>');
         $('.current-beer').text(correctBeer.name);
 
         // $('.q1-c1').text(allBreweries[0]);
@@ -146,14 +147,16 @@
         // $('.q1-c3').text(allBreweries[2]);
         // $('.q1-c4').text(allBreweries[3]);
 
-        for (var j = 0; j < 2; j++) {
+        for (var j = 0; j < qList.length; j++) {
             allBreweries = fisherYates(allBreweries);
 
             answers.push(allBreweries.splice(0, 1).join(''));
 
+            //add correct answer to choices
             choices.push(answers[j])
 
-            for (var l = 0; l < 3; l++) {
+            //add remaining 3 incorrect choices
+            for (var l = 0; l < 3; l++) { 
                 choices.push(allBreweries[l])
             }
 
@@ -161,15 +164,15 @@
 
             // $(beerClass[i]).text(allBreweries[0]);
 
-
-
+            //push array of correct choice values 
             for (var m = 0; m < beerList.length; m++) {
                 if (answers[j] === beerList[m][3]) {
                     currentBeer.push(beerList[m]);
                 }
             }
 
-            for (var k = j + 1; k < 3; k++) {
+            //add choices in random order to each button
+            for (var k = j + 1; k < qList.length; k++) {
                 $('.q' + k + '-c1').text(choices[0]);
                 $('.q' + k + '-c2').text(choices[1]);
                 $('.q' + k + '-c3').text(choices[2]);
@@ -207,6 +210,8 @@
             createQuestion();
         }
 
+        $(this).hide();
+
     })
 
     $('.guess-btn').click(function (event) {
@@ -217,6 +222,12 @@
 
             check($(this));
         }
+
+        qIndex++;
+
+        qCount++;
+
+        $('.title').html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>');
 
         // guessMade = true; //here
 
@@ -245,17 +256,18 @@
            
             btn.removeClass('btn-light').addClass('btn-danger');
         }
+
+        for (var n = 1; n < 5; n++) {
+            if ($('.q' + qCount + '-c' + n).text() === answers[qIndex]) {
+                $('.q' + qCount + '-c' + n).removeClass('btn-light').addClass('btn-success');
+            }
+        }
         
-        $('.q' + qCount + '-ask').text("Current score: " + ((correctCount / qCount) * 100) + "%");
+        $('.q' + qCount + '-ask').text("Current score: " + (Math.floor((correctCount / qCount) * 100)) + "%");
 
-        qIndex++;
-
-        qCount++;
     }
 
-    $('.correct').click(function () {
-        console.log('correct');
-    })
+
 
     //$(document).ready(setInterval(toggleColor, 1000))
 
