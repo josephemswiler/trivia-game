@@ -1,30 +1,30 @@
 (function () {
 
     // let breweries = [
-    //     "Jester King Brewery",
+    //      "Jester King Brewery",
     //     "Oddwood Ales",
     //     "Celis Brewery",
-    //     "(512) Brewing Company",
+    //      "(512) Brewing Company",
     //     "St. Elmo Brewing Co.",
     //     "Draught House Pub & Brewery",
-    //     "Austin Beerworks",
-    //     "Adelbert's Brewery",
-    //     "Pinthouse Pizza Craft Brewpub",
-    //     "Hops and Grain Brewery",
+    //      "Austin Beerworks",
+    //      "Adelbert's Brewery",
+    //      "Pinthouse Pizza Craft Brewpub",
+    //      "Hops and Grain Brewery",
     //     "Oasis Texas Brewing Company",
-    //     "Lazarus Brewing Company",
+    //      "Lazarus Brewing Company",
     //     "North by Northwest Restaurant & Brewery",
     //     "Last Stand Brewing Company",
-    //     "Blue Owl Brewing",
+    //      "Blue Owl Brewing",
     //     "Black Star Co-op Pub & Brewery",
-    //     "Hi Sign Brewing",
-    //     "Friends & Allies Brewing",
-    //     "Zilker Brewing Co.",
-    //     "Austin Beer Garden Brewing Co.",
+    //      "Hi Sign Brewing",
+    //      "Friends & Allies Brewing",
+    //      "Zilker Brewing Co.",
+    //      "Austin Beer Garden Brewing Co.",
     //     "Independence Brewing Co.",
     //     "4th Tap Brewing Co-op",
     //     "Southern Heights Brewing Company",
-    //     "Uncle Billy's Brew & Que",
+    //      "Uncle Billy's Brew & Que",
     //     "Circle Brewing Company",
     //     "Oskar Blues Brewery",
     //     "Infamous Brewing Company",
@@ -47,17 +47,11 @@
         ["Spirit Animal", "Sour Pale Ale", "5.10%", "Blue Owl Brewing"],
         ["Parks & Rec", "Pale Ale", "5.60%", "Zilker Brewing Co."],
         ["Hell Yes", "Munich Helles Lager", "4.50%", "Austin Beer Garden Brewing Co."],
-        ["Omg, Omg, Omg, Like, Seriously", "IPA", "6.70%", "Hi Sign Brewing"]
-    ]
+        ["Omg, Omg, Omg, Like, Seriously", "IPA", "6.70%", "Hi Sign Brewing"],
+        ["The Noisy Cricket", "IPA", "4.70%", "Friends & Allies Brewing"],
+        ["Thirsty Goat", "Amber Ale", "6.5%", "Thirsty Planet Brewing Company"]
+    ];
 
-    function Beer(name, style, abv, brewery) {
-        this.name;
-        this.style;
-        this.abv;
-        this.brewery;
-    }
-
-    var wrongBreweries = [];
     var allBreweries = [];
     var answers = [];
     var choices = [];
@@ -79,11 +73,14 @@
         while (0 !== index) {
 
             randIndex = Math.floor(Math.random() * index);
+
             index -= 1;
 
             // And swap it with the current element.
             tempVal = arr[index];
+
             arr[index] = arr[randIndex];
+
             arr[randIndex] = tempVal;
         }
 
@@ -107,7 +104,7 @@
                 'display': 'none'
             })
             .html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>')
-            .fadeIn('slow'); //here
+            .fadeIn('slow');
 
         for (var j = 0; j < qList.length; j++) {
 
@@ -142,6 +139,8 @@
                 $('.q' + k + '-c3').text(choices[2]);
                 $('.q' + k + '-c4').text(choices[3]);
                 $('.q' + k + '-beer').text(currentBeer[j][0])
+                $('.q' + k + '-style').text(currentBeer[j][1])
+                $('.q' + k + '-abv').text(currentBeer[j][2])
             }
 
             choices = [];
@@ -150,9 +149,11 @@
 
     function check(btn) {
 
+        guessMade = true;
+
         qTimer.stop();
 
-        $('.q' + qCount + '-lead').html("<span class='guess-beer'>" + currentBeer[qIndex][0] + "</span>" + " is brewed by " + currentBeer[qIndex][3] + " in beautiful Austin, TX! It is a wonderful " + currentBeer[qIndex][1] + " with an ABV of " + currentBeer[qIndex][2] + ". Cheers!");
+        $('.q' + qCount + '-lead').html("<span class='guess-beer'>" + currentBeer[qIndex][0] + "</span>" + " is brewed by <span class='guess-stat'>" + currentBeer[qIndex][3] + "</span> in beautiful Austin, TX!");
 
         if (btn === "time out") {
 
@@ -183,34 +184,66 @@
             }
         }
 
-        $('.q' + qCount + '-ask').text("Current score: " + (Math.floor((correctCount / qCount) * 100)) + "%");
+        $('.q' + qCount + '-ask').html("Current score: <span class='guess-stat'>" + (Math.floor((correctCount / qCount) * 100)) + "% </span>");
 
         qIndex++;
 
-        qCount++; 
+        qCount++;
 
-        nextQ();
+        if (qCount > 10) {
+            end();
+        } else {
+            nextQ();
+        }
     } // /check
 
-    function nextQ() {
-        delayQ = setTimeout(function() {
+    function end() {
+        $('.correct-guesses').text(correctCount);
+
+        $('.conclusion').css({
+            'display': 'flex'
+        })
+
+        delayQ = setTimeout(function () {
+
             qTimer.reset();
+
             qTimer.stop();
+
+            $('.title').text("Done");
+
+            $('.timer').hide();
+
+            $('.replay').fadeIn('slow');
+
+            $('html, body').animate({
+                scrollTop: ($('.conclusion').offset().top)
+            }, 500);
+        }, 2000);
+
+    }
+
+    function nextQ() {
+        delayQ = setTimeout(function () {
+
+            qTimer.reset();
+
+            qTimer.stop();
+
             $('.title').html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>');
-            $('.q' + qCount).slideDown("slow", function() {
+
+            $('.q' + qCount).slideDown("slow", function () {
+
                 $('html, body').animate({
                     scrollTop: ($(this).offset().top)
-                },500);
+                }, 500);
             });
+
             qTimer.start();
-            
-            //smooth scroll
 
-
-            //smooth scroll
-
-          }, 2000);
-    } // /nexTq
+            guessMade = false;
+        }, 2000);
+    } // /nextQ
 
     var qTimer = {
 
@@ -245,38 +278,39 @@
 
             qTimer.time--
 
-            var timeNow = qTimer.time;
+                var timeNow = qTimer.time;
 
             if (timeNow < 10) {
 
                 timeNow = "0" + timeNow;
-            } 
-            
+            }
+
             $('.timer').text(timeNow);
 
             if (qTimer.time === 0) {
+
                 qTimer.stop();
+
                 $('.timer').removeClass('btn-outline-light').addClass('btn-secondary');
+
                 check("time out");
             }
         }
     }; // /qTimer
 
-    $('.timer').click(function() {
-        if (!timerOn) {
-            qTimer.start();
-        } else {
-            qTimer.stop();
-        }
-    })
+    function startGame(e) {
 
-    $('.play-game').click(function () {
-        if (allBreweries.length < 4) { //here
+        if (allBreweries.length < 4) {
 
             createQuestion();
         }
 
-        $('.q' + qCount).slideDown("slow");
+        $('.q' + qCount).slideDown("slow", function () {
+
+            $('html, body').animate({
+                scrollTop: ($(this).offset().top)
+            }, 500);
+        });
 
         qTimer.reset();
 
@@ -284,7 +318,23 @@
 
         qTimer.start();
 
-        $(this).hide();
+        e.hide();
+    } // /startGame
+
+    $('.timer').click(function () {
+
+        if (!timerOn) {
+
+            qTimer.start();
+        } else {
+
+            qTimer.stop();
+        }
+    })
+
+    $('.play-game').click(function () {
+
+        startGame($(this));
     }) // /click .play-game
 
     $('.guess-btn').click(function (event) {
@@ -295,11 +345,20 @@
 
             check($(this));
         }
-
-
-
-        // guessMade = true; //here
     }); // /click .guess-btn
 
+    $('.replay').click(function () {
+
+        $('html, body').animate({
+
+            scrollTop: 0
+        }, 500, function () {
+            delayQ = setTimeout(function () {
+
+                location.reload();
+            }, 500);
+
+        });
+    })
 
 })() //function

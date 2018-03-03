@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Shrikhand|Bungee+Shade|Ubuntu');
-body {
-
-}
+@import url('https://fonts.googleapis.com/css?family=Shrikhand|Bungee+Shade|Ubuntu|Bungee+Inline');
+body {}
 
 html,
 body,
@@ -13,13 +11,14 @@ body,
     font-size: 18px;
     color: #7f8c8d;
 }
-/* 
+
 .jumbotron-fluid {
-
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
 }
-.main-title {
-
-} */
 
 .question-screen {
     padding-top: 92px;
@@ -36,13 +35,18 @@ body,
     left: 0;
     width: 100%;
     background: rgba(52, 73, 94, .5);
-    color:#fff;
+    color: #fff;
+}
+
+.replay {
+    display: none;
 }
 
 .title {
     font-family: 'Bungee Shade', cursive;
     font-size: 28px;
     line-height: 56px;
+    letter-spacing: 1px;
 }
 
 h1 {
@@ -51,9 +55,44 @@ h1 {
     line-height: 56px;
 }
 
+.guess-stat,
 .guess-beer {
     color: #34495e;
 }
+
 .btn-success {
     background: #2ecc71;
+}
+
+.welcome {
+    background-image: url('../images/cheers.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.title-1 {
+    font-family: 'Bungee Inline', cursive;
+}
+
+.text-welcome {
+    background: rgba(255, 255, 255, .6);
+    border-radius: 5px;
+    padding: 50px 0px 50px 0px;
+    color: #34495e;
+}
+
+.conclusion {
+    display: none;
+    background-image: url('../images/confetti.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media(max-width: 600px) {
+    .navbar-light {
+        text-align: center;
+    }
+    .justify-content-end {
+        margin: 0 auto;
+    }
 }
