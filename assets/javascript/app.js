@@ -1,39 +1,39 @@
 (function () {
 
-    let breweries = [
-        "Jester King Brewery",
-        "Oddwood Ales",
-        "Celis Brewery",
-        "(512) Brewing Company",
-        "St. Elmo Brewing Co.",
-        "Draught House Pub & Brewery",
-        "Austin Beerworks",
-        "Adelbert's Brewery",
-        "Pinthouse Pizza Craft Brewpub",
-        "Hops and Grain Brewery",
-        "Oasis Texas Brewing Company",
-        "Lazarus Brewing Company",
-        "North by Northwest Restaurant & Brewery",
-        "Last Stand Brewing Company",
-        "Blue Owl Brewing",
-        "Black Star Co-op Pub & Brewery",
-        "Hi Sign Brewing",
-        "Friends & Allies Brewing",
-        "Zilker Brewing Co.",
-        "Austin Beer Garden Brewing Co.",
-        "Independence Brewing Co.",
-        "4th Tap Brewing Co-op",
-        "Southern Heights Brewing Company",
-        "Uncle Billy's Brew & Que",
-        "Circle Brewing Company",
-        "Oskar Blues Brewery",
-        "Infamous Brewing Company",
-        "Naughty Brewing Co.",
-        "South Austin Brewery",
-        "Resignation Brewery",
-        "Thirsty Planet Brewing Company",
-        "Guns & Oil Brewing Co."
-    ];
+    // let breweries = [
+    //     "Jester King Brewery",
+    //     "Oddwood Ales",
+    //     "Celis Brewery",
+    //     "(512) Brewing Company",
+    //     "St. Elmo Brewing Co.",
+    //     "Draught House Pub & Brewery",
+    //     "Austin Beerworks",
+    //     "Adelbert's Brewery",
+    //     "Pinthouse Pizza Craft Brewpub",
+    //     "Hops and Grain Brewery",
+    //     "Oasis Texas Brewing Company",
+    //     "Lazarus Brewing Company",
+    //     "North by Northwest Restaurant & Brewery",
+    //     "Last Stand Brewing Company",
+    //     "Blue Owl Brewing",
+    //     "Black Star Co-op Pub & Brewery",
+    //     "Hi Sign Brewing",
+    //     "Friends & Allies Brewing",
+    //     "Zilker Brewing Co.",
+    //     "Austin Beer Garden Brewing Co.",
+    //     "Independence Brewing Co.",
+    //     "4th Tap Brewing Co-op",
+    //     "Southern Heights Brewing Company",
+    //     "Uncle Billy's Brew & Que",
+    //     "Circle Brewing Company",
+    //     "Oskar Blues Brewery",
+    //     "Infamous Brewing Company",
+    //     "Naughty Brewing Co.",
+    //     "South Austin Brewery",
+    //     "Resignation Brewery",
+    //     "Thirsty Planet Brewing Company",
+    //     "Guns & Oil Brewing Co."
+    // ];
 
     let beerList = [
         ["Heisenberg", "Kristalweizen", "4.80%", "Austin Beerworks"],
@@ -50,15 +50,6 @@
         ["Omg, Omg, Omg, Like, Seriously", "IPA", "6.70%", "Hi Sign Brewing"]
     ]
 
-
-
-    // function toggleColor() {
-    //     $('.title-1')
-    //         .animate({
-    //             "color": "#757575"
-    //         }, 1000)
-    // }
-
     function Beer(name, style, abv, brewery) {
         this.name;
         this.style;
@@ -66,35 +57,19 @@
         this.brewery;
     }
 
-    var correctBeer = new Beer();
-    var wrongOne = new Beer();
-    var wrongTwo = new Beer();
-    var wrongThree = new Beer();
-
     var wrongBreweries = [];
     var allBreweries = [];
     var answers = [];
-    var beerClasses = [];
     var choices = [];
     var currentBeer = [];
     var correctCount = 0;
     var qIndex = 0;
     var qCount = 1;
     var guessMade = false;
-    var qList = [0,1,2,3,4,5,6,7,8,9,10]; //total number of questions
-
-    var answerQ1;
-    var answerQ2;
-    var answerQ3;
-    var answerQ4;
-    var answerQ5;
-    var answerQ6;
-    var answerQ7;
-    var answerQ8;
-    var answerQ9;
-    var answerQ10;
-
-
+    var qList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; //total number of questions
+    var intervalId;
+    var timerOn = false;
+    var delayQ;
 
     function fisherYates(arr) {
         var index = arr.length;
@@ -121,33 +96,21 @@
 
         beerList = fisherYates(beerList);
 
-        //var randBeer = beerList[Math.floor(Math.random() * beerList.length)]
-
-        correctBeer.name = beerList[0][0];
-        correctBeer.style = beerList[0][1];
-        correctBeer.abv = beerList[0][2];
-        correctBeer.brewery = beerList[0][3];
-        // beerList.splice(0, 1)
-        // allBreweries.push(correctBeer.brewery);
-
         for (var i = 0; i < beerList.length; i++) {
 
             allBreweries.push(beerList[i][3])
-
         } // /for loop
 
         allBreweries = fisherYates(allBreweries);
 
-
-        $('.title').html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>');
-        $('.current-beer').text(correctBeer.name);
-
-        // $('.q1-c1').text(allBreweries[0]);
-        // $('.q1-c2').text(allBreweries[1]);
-        // $('.q1-c3').text(allBreweries[2]);
-        // $('.q1-c4').text(allBreweries[3]);
+        $('.title').css({
+                'display': 'none'
+            })
+            .html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>')
+            .fadeIn('slow'); //here
 
         for (var j = 0; j < qList.length; j++) {
+
             allBreweries = fisherYates(allBreweries);
 
             answers.push(allBreweries.splice(0, 1).join(''));
@@ -156,17 +119,18 @@
             choices.push(answers[j])
 
             //add remaining 3 incorrect choices
-            for (var l = 0; l < 3; l++) { 
+            for (var l = 0; l < 3; l++) {
+
                 choices.push(allBreweries[l])
             }
 
             choices = fisherYates(choices);
 
-            // $(beerClass[i]).text(allBreweries[0]);
-
             //push array of correct choice values 
             for (var m = 0; m < beerList.length; m++) {
+
                 if (answers[j] === beerList[m][3]) {
+
                     currentBeer.push(beerList[m]);
                 }
             }
@@ -181,28 +145,130 @@
             }
 
             choices = [];
-
-
         }
-        // for (var k = 0; k < 4; k++) {
-        //     var l = k + 1;
-        //     beerClasses.push = '.q1-c' + l;
-        //     $(beerClasses[k]).text(allBreweries[k]);
-        //     console.log(beerClasses)
-        // }
-        // console.log(beerClasses[0])
+    } // /createQuestion
 
-        // $( "btn" ).each(function( index, element ) {
-        //     // element == this
-        //     $( element ).text(allBreweries[1]);
-        //     if ( $( this ).is( "#stop" ) ) {
-        //       $( "span" ).text( "Stopped at div index #" + index );
-        //       return false;
-        //     }
-        //   });
+    function check(btn) {
+
+        qTimer.stop();
+
+        $('.q' + qCount + '-lead').html("<span class='guess-beer'>" + currentBeer[qIndex][0] + "</span>" + " is brewed by " + currentBeer[qIndex][3] + " in beautiful Austin, TX! It is a wonderful " + currentBeer[qIndex][1] + " with an ABV of " + currentBeer[qIndex][2] + ". Cheers!");
+
+        if (btn === "time out") {
+
+            $('.q' + qCount + '-beer').text("Time's Up!").css({
+                "color": "#e74c3c"
+            })
+        } else if (btn.text() === answers[qIndex]) {
+
+            correctCount++;
+
+            $('.q' + qCount + '-beer').text("Correct!").css({
+                "color": "#2ecc71"
+            })
+
+            btn.removeClass('btn-light').addClass('btn-success');
+        } else {
+
+            $('.q' + qCount + '-beer').text("Incorrect!").css({
+                "color": "#e74c3c"
+            })
+
+            btn.removeClass('btn-light').addClass('btn-secondary');
+        }
+
+        for (var n = 1; n < 5; n++) {
+            if ($('.q' + qCount + '-c' + n).text() === answers[qIndex]) {
+                $('.q' + qCount + '-c' + n).removeClass('btn-light').addClass('btn-success');
+            }
+        }
+
+        $('.q' + qCount + '-ask').text("Current score: " + (Math.floor((correctCount / qCount) * 100)) + "%");
+
+        qIndex++;
+
+        qCount++; 
+
+        nextQ();
+    } // /check
+
+    function nextQ() {
+        delayQ = setTimeout(function() {
+            qTimer.reset();
+            qTimer.stop();
+            $('.title').html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>');
+            $('.q' + qCount).slideDown("slow", function() {
+                $('html, body').animate({
+                    scrollTop: ($(this).offset().top)
+                },500);
+            });
+            qTimer.start();
+            
+            //smooth scroll
 
 
-    }
+            //smooth scroll
+
+          }, 2000);
+    } // /nexTq
+
+    var qTimer = {
+
+        time: 10,
+
+        reset: function () {
+
+            qTimer.time = 10;
+
+            $('.timer').text(qTimer.time)
+        },
+
+        start: function () {
+
+            $('.timer').removeClass('btn-secondary').addClass('btn-outline-light');
+
+            if (!timerOn) {
+
+                intervalId = setInterval(qTimer.count, 1000);
+
+                timerOn = true;
+            }
+        },
+        stop: function () {
+
+            clearInterval(intervalId);
+
+            timerOn = false;
+        },
+
+        count: function () {
+
+            qTimer.time--
+
+            var timeNow = qTimer.time;
+
+            if (timeNow < 10) {
+
+                timeNow = "0" + timeNow;
+            } 
+            
+            $('.timer').text(timeNow);
+
+            if (qTimer.time === 0) {
+                qTimer.stop();
+                $('.timer').removeClass('btn-outline-light').addClass('btn-secondary');
+                check("time out");
+            }
+        }
+    }; // /qTimer
+
+    $('.timer').click(function() {
+        if (!timerOn) {
+            qTimer.start();
+        } else {
+            qTimer.stop();
+        }
+    })
 
     $('.play-game').click(function () {
         if (allBreweries.length < 4) { //here
@@ -210,9 +276,16 @@
             createQuestion();
         }
 
-        $(this).hide();
+        $('.q' + qCount).slideDown("slow");
 
-    })
+        qTimer.reset();
+
+        $('.timer').fadeIn('slow');
+
+        qTimer.start();
+
+        $(this).hide();
+    }) // /click .play-game
 
     $('.guess-btn').click(function (event) {
 
@@ -223,66 +296,10 @@
             check($(this));
         }
 
-        qIndex++;
 
-        qCount++;
-
-        $('.title').html('Question <sup>#</sup><span class="q-number">' + qCount + '</span>');
 
         // guessMade = true; //here
-
-    });
-
-    function check(btn) {
-
-        $('.q' + qCount + '-lead').html("<span class='guess-beer'>" + currentBeer[qIndex][0] + "</span>" + " is brewed by " + currentBeer[qIndex][3] + " in beautiful Austin, TX! It is a wonderful " + currentBeer[qIndex][1] + " with an ABV of " + currentBeer[qIndex][2] + ". Cheers!");
-
-        if (btn.text() === answers[qIndex]) {
-
-            correctCount++;
-            
-            $('.q' + qCount + '-beer').text("Correct!").css({
-                
-                "color": "#2ecc71"
-            })
-           
-            btn.removeClass('btn-light').addClass('btn-success');
-        } else {
-           
-            $('.q' + qCount + '-beer').text("Incorrect!").css({
-              
-                "color": "#e74c3c"
-            })
-           
-            btn.removeClass('btn-light').addClass('btn-danger');
-        }
-
-        for (var n = 1; n < 5; n++) {
-            if ($('.q' + qCount + '-c' + n).text() === answers[qIndex]) {
-                $('.q' + qCount + '-c' + n).removeClass('btn-light').addClass('btn-success');
-            }
-        }
-        
-        $('.q' + qCount + '-ask').text("Current score: " + (Math.floor((correctCount / qCount) * 100)) + "%");
-
-    }
+    }); // /click .guess-btn
 
 
-
-    //$(document).ready(setInterval(toggleColor, 1000))
-
-    // function Question(ask, choices, answer) {
-    //     this.ask = ask;
-    //     this.choices = choices;
-    //     this.answer = answer;
-    // }
-    // function buildQuestion () {
-    //     var newQ = makeQuestion;
-
-    //     for (var i = 0; i < beers.length; i++) {
-
-    //     }
-    // }
-    // var q1 = new Question(); //here
-
-})()
+})() //function

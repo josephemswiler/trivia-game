@@ -1,23 +1,48 @@
 @import url('https://fonts.googleapis.com/css?family=Shrikhand|Bungee+Shade|Ubuntu');
 body {
-    background: #ecf0f1;
+
+}
+
+html,
+body,
+.jumbotron {
+    height: auto;
+    min-height: 100vh;
     font-family: 'Ubuntu', sans-serif;
     line-height: 36px;
     font-size: 18px;
     color: #7f8c8d;
 }
-header {
-    margin: 0 auto;
-    text-align: center;
+/* 
+.jumbotron-fluid {
+
 }
+.main-title {
+
+} */
+
+.question-screen {
+    padding-top: 92px;
+    display: none;
+}
+
+.timer {
+    display: none;
+}
+
+.navbar-light {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(52, 73, 94, .5);
+    color:#fff;
+}
+
 .title {
     font-family: 'Bungee Shade', cursive;
     font-size: 28px;
     line-height: 56px;
-    color: #757575;
-}
-.title-1 {
-    color: #e74c3c;
 }
 
 h1 {
@@ -25,13 +50,10 @@ h1 {
     font-size: 28px;
     line-height: 56px;
 }
-.btn:hover {
-}
-sup {
 
-}
-
-.guess-beer
- {
+.guess-beer {
     color: #34495e;
+}
+.btn-success {
+    background: #2ecc71;
 }
